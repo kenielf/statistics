@@ -222,6 +222,12 @@ def list_format(entry_list, size):
     return output_list
 
 
+def sum_calculator(entry, size=0):
+    if size == 0:
+        return sum([Decimal(v) for v in entry])
+    return round(sum([Decimal(v) for v in entry]), size)
+
+
 # Prints formatted table
 def fancy_print(
     class_value,
@@ -288,12 +294,12 @@ def fancy_print(
     print(
         "│    TOTAL(Σ):              │%3s │%8s │%8s%% │     │          │%7s │          │           │%10s │%11s │"
         % (
-            sum(list(Decimal(v) for v in frequency_list)),
-            round(sum(list(Decimal(v) for v in relative_frequency_list)), 2),
-            round(sum(list(Decimal(v) for v in perc_relative_frequency_list))),
-            sum(list(Decimal(v) for v in fixis)),
-            sum(list(Decimal(v) for v in frequencies_xixbar_list)),
-            round(sum(list(Decimal(v) for v in frequencies_mod_xixbar_squared)), 3),
+            sum_calculator(frequency_list),
+            sum_calculator(relative_frequency_list, 2),
+            sum_calculator(perc_relative_frequency_list, 1),
+            sum_calculator(fixis),
+            sum_calculator(frequencies_xixbar_list),
+            sum_calculator(frequencies_mod_xixbar_squared, 3)
         )
     )
     print(
@@ -319,7 +325,6 @@ if __name__ == "__main__":
     #
     mean, median, mode, amplitude = central_tendencies(values)
     class_values = class_group(values)
-    print(class_values)
     chosen_class = class_values[0]
     interval = Decimal(amplitude / chosen_class)
     min_list, max_list = min_max_table(values, chosen_class, interval)
@@ -342,7 +347,6 @@ if __name__ == "__main__":
         frequencies, xixbar_list, frequencies_mod_xixbar_squared
     )
     #
-    print(absolute_medium_deviation, variance, default_deviation)
     #
     # for i in range(len(perc_accumulated_frequencies)):
     #    print(i, ":", float(accumulated_frequencies[i]))
