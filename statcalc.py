@@ -10,7 +10,7 @@ from constants import cheat_str, sanitized_list
 def sanitize(input_str):
     while True:
         try:
-            sanitized_list = sorted(Decimal(v) for v in input_str.split())
+            sanitized_list = sorted([Decimal(v) for v in input_str.split()])
             return sanitized_list
         except ValueError:
             print("The list of values contains an error, try again.")
@@ -22,7 +22,7 @@ def get_input():
     while True:
         try:
             input_str = input("What are the values?\n" "Separate them with spaces.\n")
-            input_list = sorted(Decimal(v) for v in input_str.split())
+            input_list = sorted([Decimal(v) for v in input_str.split()])
             return input_list
         except ValueError:
             print("The list of values contains an error, try again.")
@@ -211,7 +211,7 @@ def deviations(
 
 
 # Sanitizes values to work in fancy_print()
-def list_format(entry_list, size):
+def list_format(entry_list, size=0):
     if size == 0:
         return entry_list
     output_list = []
@@ -222,11 +222,34 @@ def list_format(entry_list, size):
     return output_list
 
 
+def decimal_format(entry_decimal, size=0):
+    if size == 0:
+        return entry_decimal
+    output_str = ""
+    format_str = "{:." + str(size) + "f}"
+    for entry in range(1):
+        string = format_str.format(entry_decimal)
+        output_str += string
+    return output_str
+
+
 def sum_calculator(entry, size=0):
     if size == 0:
         return sum([Decimal(v) for v in entry])
     return round(sum([Decimal(v) for v in entry]), size)
 
+
+def rol_string(input_list, class_value):
+    rol_list = []
+    cur_min, cur_max = 0, 0
+    for i in range(class_value):
+        current = ""
+        cur_max += (len(input_list) / class_value) 
+        for o in range(int(cur_min), int(cur_max)):
+            current += str(input_list[o]) + ", "
+        rol_list.append(current)
+        cur_min = cur_max
+    return rol_list
 
 # Prints formatted table
 def fancy_print(
@@ -249,12 +272,12 @@ def fancy_print(
     min_list = list_format(min_list, 2)
     max_list = list_format(max_list, 2)
     midpoint_list = list_format(midpoint_list, 2)
-    frequency_list = list_format(frequency_list, 0)
+    frequency_list = list_format(frequency_list)
     relative_frequency_list = list_format(relative_frequency_list, 6)
     percentage_relative_frequency_list = list_format(perc_relative_frequency_list, 2)
-    accumulated_frequency_list = list_format(acc_frequency_list, 0)
+    accumulated_frequency_list = list_format(acc_frequency_list)
     perc_accumulated_frequency_list = list_format(perc_acc_frequency_list, 2)
-    fixis = list_format(fixi_values, 0)
+    fixis = list_format(fixi_values)
     xixbar_list = list_format(xixbars, 4)
     xixbar_squared_list = list_format(xixbars_squared, 4)
     frequencies_xixbar_list = list_format(frequencies_xixbar, 4)
@@ -307,25 +330,83 @@ def fancy_print(
     )
 
 
-def standalone_table():
-    pass
+def isolated_values_table(
+    precision,
+    rol,
+    mean,
+    median,
+    mode,
+    ampltiude,
+    class_value,
+    interval,
+    absolute_mean_deviation,
+    variance,
+    default_deviation
+):
+    print(
+        "┌────────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────────────┐"
+    )
+    print(
+        "│    [ROL] [COLUMNS: %4s] [INTERVAL: %4s]                  │                                                                  │"
+        % (
+            class_value,
+            interval
+        )
+    )
+    print(
+        "├────────────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────┤"
 
+    )
+    for entry in range(class_value):
+        if entry == 0:
+            current_line = f"Precision: [{precision}] Decimals"
+        elif entry == 1:
+            current_line = f"Mean: [{mean}]"
+        elif entry == 2:
+            current_line = f"Median: [{median}]"
+        elif entry == 3:
+            current_line = f"Mode: {[float(v) for v in mode]}"
+        elif entry == 4:
+            current_line = f"Amplitude: [{amplitude}]"
+        else:
+            current_line = ""
+        #
+        print(
+            "│  %-56s  │ %-64s │"
+            % (
+                (rol[entry]),
+                current_line
+            )
+        )
+    print(
+        "├────────────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────────────┤"
+    )
+    print(
+        "│ Abs. Mean Deviation: %-104s │\n│ Variance: %-115s │\n│ Default Variation: %-106s │"
+        % (
+            decimal_format(absolute_mean_deviation, 30),
+            decimal_format(variance, 30),
+            decimal_format(default_deviation, 30)
+     
+        )
+    )
+    print(
+        "└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘"
+    )
 
-# TEST #
 
 # MAIN #
 if __name__ == "__main__":
-    # print("DEBUG\n")
-    # print(list(float(v) for v in sanitize(cheat_str)))
-    # print(sanitized_list, "\n\n")
     getcontext().prec = 30
+    precision = getcontext().prec
     # USE INPUT OR SET TEST STR/LIST #
-    # values = get_input()
+    #values = get_input()
     values = sanitize(cheat_str)
     #
     mean, median, mode, amplitude = central_tendencies(values)
     class_values = class_group(values)
     chosen_class = class_values[0]
+    base_class = chosen_class
     interval = Decimal(amplitude / chosen_class)
     min_list, max_list = min_max_table(values, chosen_class, interval)
     if len(min_list) != chosen_class:
@@ -343,13 +424,11 @@ if __name__ == "__main__":
     frequencies_mod_xixbar_squared = frequency_mod_xixbar_squared(
         xixbar_squared_list, frequencies
     )
-    absolute_medium_deviation, variance, default_deviation = deviations(
+    absolute_mean_deviation, variance, default_deviation = deviations(
         frequencies, xixbar_list, frequencies_mod_xixbar_squared
     )
     #
-    #
-    # for i in range(len(perc_accumulated_frequencies)):
-    #    print(i, ":", float(accumulated_frequencies[i]))
+    rol = rol_string(values, base_class)
     #
     fancy_print(
         chosen_class,
@@ -366,5 +445,19 @@ if __name__ == "__main__":
         xixbar_squared_list,
         frequencies_mod_xixbar,
         frequencies_mod_xixbar_squared,
+    )
+    print("\n")
+    isolated_values_table(
+        precision,
+        rol,
+        mean,
+        median,
+        mode,
+        amplitude,
+        base_class,
+        interval,
+        absolute_mean_deviation,
+        variance,
+        default_deviation
     )
 
