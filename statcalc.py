@@ -397,7 +397,7 @@ def isolated_values_table(
 
 # MAIN #
 if __name__ == "__main__":
-    getcontext().prec = 30
+    getcontext().prec = 50
     precision = getcontext().prec
     # USE INPUT OR SET TEST STR/LIST #
     #values = get_input()
@@ -460,4 +460,4 @@ if __name__ == "__main__":
         variance,
         default_deviation
     )
-
+    print(relative_frequencies)
