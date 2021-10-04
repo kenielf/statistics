@@ -1,0 +1,2 @@
+pysimplegui==4.49.0
+colorama==0.4.4

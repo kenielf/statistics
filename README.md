@@ -1,5 +1,6 @@
 # Statistics
-Kenielf's High Precision Statistics Calculator
+## Kenielf's High Precision Statistics Calculator
+Run `statcalc.py` in order to use the calculator
 
 # Installation
 Requires Python3.X
@@ -8,7 +9,7 @@ $ git clone https://github.com/kenielf/statistics
 $ cd statistics
 $ python3 -m venv env
 $ source ./env/bin/activate
-$ python3 -m pip install pysimplegui
+$ python3 -m pip install -r requirements.txt
 ```
 To execute the program just run `python3 statcalc.py` inside of the directory.
 
@@ -17,7 +18,7 @@ To execute the program just run `python3 statcalc.py` inside of the directory.
  - [ ] Improve Calculations;
  - [ ] Add Windows support;
  - [ ] Add GUI interface;
- - [ ] Refactor the code for readability and easy of further refactoring;
+ - [X] Refactor the code for readability and easy of further refactoring;
  - [ ] Add save as HTML function;
  - [ ] Add read from HTML function;
 
