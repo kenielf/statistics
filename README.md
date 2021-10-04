@@ -14,7 +14,7 @@ $ python3 -m pip install -r requirements.txt
 To execute the program just run `python3 statcalc.py` inside of the directory.
 
 # TODO
- - [ ] SYSARGS Support
+ - [X] SYSARGS Support
  - [ ] Improve Calculations;
  - [ ] Add Windows support;
  - [ ] Add GUI interface;

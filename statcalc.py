@@ -1,9 +1,8 @@
 #!/bin/env python
 # Kenielf's General Statistics Calculator
-import math, statistics
+import math, statistics, sys
 from colorama import Fore, Style
 from decimal import *
-
 # Testing
 from constants import cheat_str, sanitized_list
 
@@ -393,6 +392,16 @@ def auxiliary_table_print(
     )
 
 
+def help_print():
+    print(
+        f"usage: python3 pystatcalc.py [-h] [-t] [-i <list_string | path to file.html>]\n\n"
+        f"optional arguments:\n"
+        f"  -h              shows this help message and exits\n"
+        f"  -t              forces terminal output (GUI by default)\n"
+        f"  -i              direct input, should be a list of values separated by spaces or a .html file\n"
+    )
+
+
 # ----- Runtime Functions -----#
 def cli_calculator():
     while True:
@@ -470,5 +479,19 @@ def cli_calculator():
 
 # ----- MAIN -----#
 if __name__ == "__main__":
-    cli_calculator()
+    args = sys.argv
+    if len(args) > 1:
+        if ("-t" in args) == True:
+            print("Terminal Output")
+            cli_calculator()
+        elif ("-h" in args) == True:
+            print("No arguments")
+            help_print()
+        else:
+            print("Invalid arguments, please try again.")
+            help_print()
+    else:
+        print("No arguments")
+        help_print()
+
 
