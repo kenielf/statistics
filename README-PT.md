@@ -6,6 +6,8 @@
 
 # Instalação
 Requer Python3.X
+
+# Instalação Linux:
 ```bash
 $ git clone https://github.com/kenielf/statistics
 $ cd statistics/source
@@ -13,6 +15,17 @@ $ python3 -m venv env
 $ source ./env/bin/activate
 $ python3 -m pip install -r ../requirements.txt
 ```
+
+# Instalação Windows:
+Baixe e extraia o lançamento mais recente
+```
+cd \statistics-main\source
+python -m venv env
+env\Scripts\activate.bat
+python -m pip install -r ..\requirements.txt
+```
+Usuários no Windows podem simplesmente baixar o lançamento mais recente, descomprimir e rodar o statcalc.exe
+
 Para executar o programa, use o comando `python3 statcalc.py` dentro do diretório que contém `statcalc.py`
 
 # Uso
